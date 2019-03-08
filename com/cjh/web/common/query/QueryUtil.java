@@ -134,4 +134,10 @@ public class QueryUtil {
 		}
 		return (Page<T>) dao.findAll(p,PageRequest.of(currentPage, pageSize, sort));
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Long count(JpaSpecificationExecutor<?> dao, Object searchObj){
+		Specification spec = QueryConditionFactory.getSpecification(searchObj, MarryType.AND);
+		return dao.count(spec);
+	}
 }

@@ -132,9 +132,8 @@ public class QueryConditionFactory {
 					throw new RuntimeException("字段的排序方式有误!!!应该为---asc|ASC---或者desc|DESC");
 				}
 			}
-			return Sort.by(orderList);
 		}
-		return null;
+		return Sort.by(orderList);
 	}
 	
 	/**
