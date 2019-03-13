@@ -5,8 +5,13 @@ import com.cjh.web.common.query.annotation.PageSize;
 import com.cjh.web.common.query.annotation.QueryGroup;
 import com.cjh.web.common.query.annotation.QueryOrder;
 
+/**
+ * 查询Vo底层基类
+ * @author chen
+ *
+ * 2019年1月11日
+ */
 public class BaseVO {
-
 	@PageCurrent
 	private Integer currentPage;
 	@PageSize
@@ -15,6 +20,15 @@ public class BaseVO {
 	private String orderby;
 	@QueryGroup
 	private String groupby;
+	private Long total;
+	
+	public Long getTotal() {
+		return total;
+	}
+
+	public void setTotal(Long total) {
+		this.total = total;
+	}
 
 	public Integer getCurrentPage() {
 		return currentPage;
