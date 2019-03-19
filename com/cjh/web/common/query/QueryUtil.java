@@ -1,6 +1,7 @@
 package com.cjh.web.common.query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class QueryUtil {
 		return (result.isPresent()) ? result.get() : null ;
 	}
 	
+	@Deprecated
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> T findOne(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
@@ -42,6 +44,7 @@ public class QueryUtil {
 		return pageQuery(dao, searchObj, p);
 	}
 	
+	@Deprecated
 	@SuppressWarnings( { "rawtypes" } )
 	public static <T> Page<T> findAllByPage(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
@@ -57,6 +60,7 @@ public class QueryUtil {
 		return listQuery(dao, searchObj, p);
 	}
 	
+	@Deprecated
 	@SuppressWarnings({ "rawtypes" })
 	public static <T> List<T> findAll(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
@@ -139,5 +143,11 @@ public class QueryUtil {
 	public static Long count(JpaSpecificationExecutor<?> dao, Object searchObj){
 		Specification spec = QueryConditionFactory.getSpecification(searchObj, MarryType.AND);
 		return dao.count(spec);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> List<T> getAllBy(JpaSpecificationExecutor<?> dao, Map<String,Object> propertyMap){
+		Specification p = QueryConditionFactory2.getSpecification(propertyMap);
+		return (List<T>) dao.findAll(p);
 	}
 }
