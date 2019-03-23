@@ -1,5 +1,6 @@
 package com.cjh.web.common.query;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class QueryUtil {
 	
 	@Deprecated
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <T> T findOne(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
+	private static <T> T findOne(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
 			return (T) dao.findOne(p);
@@ -46,7 +47,7 @@ public class QueryUtil {
 	
 	@Deprecated
 	@SuppressWarnings( { "rawtypes" } )
-	public static <T> Page<T> findAllByPage(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
+	private static <T> Page<T> findAllByPage(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
 			return pageQuery(dao, searchObj, p);
@@ -62,7 +63,7 @@ public class QueryUtil {
 	
 	@Deprecated
 	@SuppressWarnings({ "rawtypes" })
-	public static <T> List<T> findAll(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
+	private static <T> List<T> findAll(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
 			return listQuery(dao, searchObj, p);
@@ -113,34 +114,35 @@ public class QueryUtil {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> Page<T> PageQueryBy(JpaSpecificationExecutor<?> dao,
-			String propertyName, Object value, Integer currentPage,
-			Integer pageSize) {
+			String propertyName, Object value, int currentPage,
+			int pageSize) {
 		Specification p = QueryConditionFactory2.getSpecification(propertyName, value);
-		if(currentPage == null){
-			currentPage = 0;
-		}
-		if(pageSize == null){
-			pageSize = 20;
-		}
-		return (Page<T>) dao.findAll(p,PageRequest.of(currentPage, pageSize));
+		return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize));
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> Page<T> PageQueryBy(JpaSpecificationExecutor<?> dao,
-			String propertyName, Object value, Integer currentPage,
-			Integer pageSize, Sort sort) {
+			String propertyName, Object value, int currentPage,
+			int pageSize, Sort sort) {
 		Specification p = QueryConditionFactory2.getSpecification(propertyName, value);
-		if(currentPage == null){
-			currentPage = 0;
-		}
-		if(pageSize == null){
-			pageSize = 20;
-		}
-		return (Page<T>) dao.findAll(p,PageRequest.of(currentPage, pageSize, sort));
+		return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize, sort));
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> Page<T> PageQuery(JpaSpecificationExecutor<?> dao,
+			Map<String, Object> propertyMap,LinkedHashMap<String, Direction> sortMap, 
+			int currentPage, int pageSize) {
+		Specification p = QueryConditionFactory2.getSpecification(propertyMap);
+		if(sortMap == null){
+			return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize));
+		}
+		Sort sort = QueryConditionFactory2.getSort(sortMap);
+		return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize, sort));
+	}
+	
+	@Deprecated
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Long count(JpaSpecificationExecutor<?> dao, Object searchObj){
+	private static Long count(JpaSpecificationExecutor<?> dao, Object searchObj){
 		Specification spec = QueryConditionFactory.getSpecification(searchObj, MarryType.AND);
 		return dao.count(spec);
 	}
@@ -149,5 +151,15 @@ public class QueryUtil {
 	public static <T> List<T> getAllBy(JpaSpecificationExecutor<?> dao, Map<String,Object> propertyMap){
 		Specification p = QueryConditionFactory2.getSpecification(propertyMap);
 		return (List<T>) dao.findAll(p);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> List<T> getAllBy(JpaSpecificationExecutor<?> dao, Map<String,Object> propertyMap, LinkedHashMap<String,Direction> sortMap){
+		if(sortMap == null){
+			return getAllBy(dao, propertyMap);
+		}
+		Specification p = QueryConditionFactory2.getSpecification(propertyMap);
+		Sort sort = QueryConditionFactory2.getSort(sortMap);
+		return (List<T>) dao.findAll(p, sort);
 	}
 }

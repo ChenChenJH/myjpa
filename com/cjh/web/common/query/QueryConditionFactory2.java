@@ -1,5 +1,7 @@
 package com.cjh.web.common.query;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
+
+import com.cjh.web.common.query.annotation.QueryOrder;
 
 /**
  * 查询条件工厂,和注解查询无关
@@ -49,5 +56,19 @@ public class QueryConditionFactory2 {
 			}
 		};
 		return s1;
+	}
+	
+	public static Sort getSort(Map<String,Direction> sortMap){
+		if(sortMap == null){
+			return null;
+		}
+		List<Order> orderList = new ArrayList<Order>();
+		for (Map.Entry<String, Direction> entry : sortMap.entrySet()) {
+			if(entry.getKey() != null && !"".equals(entry.getKey())){
+				orderList.add(new Order(entry.getValue(), entry.getKey()));
+			}
+		}
+		return Sort.by(orderList);
+		
 	}
 }
