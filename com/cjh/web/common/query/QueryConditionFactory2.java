@@ -1,7 +1,5 @@
 package com.cjh.web.common.query;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +14,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.cjh.web.common.query.annotation.QueryOrder;
-
 /**
  * 查询条件工厂,和注解查询无关
  * @author chen
@@ -30,6 +26,9 @@ public class QueryConditionFactory2 {
 			@Override
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
+				if(propertyName == null || "".equals(propertyName)){
+					return cb.conjunction();
+				}
 				return cb.equal(root.get(propertyName), value);
 			}
 		};
@@ -42,6 +41,9 @@ public class QueryConditionFactory2 {
 			@Override
 			public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query,
 					CriteriaBuilder cb) {
+				if(map == null){
+					return cb.conjunction();
+				}
 				List<Predicate> predicateList = new ArrayList<Predicate>();
 				for(Map.Entry<String, Object> entry : map.entrySet())
 		        {

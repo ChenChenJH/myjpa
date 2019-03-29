@@ -30,7 +30,7 @@ public class QueryUtil {
 	}
 	
 	@Deprecated
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private static <T> T findOne(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
@@ -46,7 +46,7 @@ public class QueryUtil {
 	}
 	
 	@Deprecated
-	@SuppressWarnings( { "rawtypes" } )
+	@SuppressWarnings( { "rawtypes", "unused" } )
 	private static <T> Page<T> findAllByPage(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
@@ -62,7 +62,7 @@ public class QueryUtil {
 	}
 	
 	@Deprecated
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private static <T> List<T> findAll(JpaSpecificationExecutor<?> dao, Object searchObj, MarryType marryType){
 		if(marryType == MarryType.OR){
 			Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.OR);
@@ -141,7 +141,7 @@ public class QueryUtil {
 	}
 	
 	@Deprecated
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private static Long count(JpaSpecificationExecutor<?> dao, Object searchObj){
 		Specification spec = QueryConditionFactory.getSpecification(searchObj, MarryType.AND);
 		return dao.count(spec);
