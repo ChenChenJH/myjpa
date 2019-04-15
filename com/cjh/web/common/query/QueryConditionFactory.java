@@ -23,6 +23,7 @@ import com.cjh.web.common.query.annotation.QueryField;
 import com.cjh.web.common.query.annotation.QueryGroup;
 import com.cjh.web.common.query.annotation.QueryOrder;
 import com.cjh.web.common.query.annotation.QueryType;
+import java.util.Collection;
 
 /**
  * 
@@ -102,6 +103,8 @@ public class QueryConditionFactory {
 			return cb.isNull(getExpression(root,fieldName));
 		} else if (type == QueryType.IS_NOT_NULL) {
 			return cb.isNotNull(getExpression(root,fieldName));
+		} else if (type == QueryType.IN){
+			return root.get(fieldName).in(((Collection)value).toArray());
 		}
 		
 		return null;
