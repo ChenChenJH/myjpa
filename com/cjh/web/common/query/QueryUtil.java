@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Component;
 
 import com.cjh.web.common.query.QueryConditionFactory.MarryType;
 
@@ -20,8 +25,20 @@ import com.cjh.web.common.query.QueryConditionFactory.MarryType;
  *
  * 2019年1月9日
  */
+@Component
 public class QueryUtil {
 	
+	private static EntityManager em;
+	
+	public EntityManager getEm() {
+		return em;
+	}
+
+	@Autowired
+	public void setEm(EntityManager em) {
+		QueryUtil.em = em;
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <T> T findOne(JpaSpecificationExecutor<?> dao, Object searchObj){
 		Specification p = QueryConditionFactory.getSpecification(searchObj, MarryType.AND);
@@ -164,4 +181,15 @@ public class QueryUtil {
 		Sort sort = QueryConditionFactory2.getSort(sortMap);
 		return (List<T>) dao.findAll(p, sort);
 	}
+	
+	public static void executeHql(String hql,Object... values){
+		Query query =  em.createQuery(hql);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				query.setParameter(i, values[i]);
+			}
+		}
+		query.executeUpdate();
+	}
+	
 }
