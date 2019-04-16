@@ -76,7 +76,7 @@ public class QueryUtil {
 	private static <T> Page<T> pageQuery(JpaSpecificationExecutor<?> dao, Object searchObj, Specification p){
 		Sort sort = QueryConditionFactory.getSort(searchObj);
 		Integer currentPage = QueryConditionFactory.getCurrentPage(searchObj, 0);
-		Integer pageSize = QueryConditionFactory.getPageSize(searchObj, 20);
+		Integer pageSize = QueryConditionFactory.getPageSize(searchObj, 10);
 		if(sort == null){
 			return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize));
 		}
@@ -131,8 +131,10 @@ public class QueryUtil {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> Page<T> PageQuery(JpaSpecificationExecutor<?> dao,
 			Map<String, Object> propertyMap,LinkedHashMap<String, Direction> sortMap, 
-			int currentPage, int pageSize) {
+			Integer currentPage, Integer pageSize) {
 		Specification p = QueryConditionFactory2.getSpecification(propertyMap);
+		currentPage = currentPage == null ? 0 : currentPage;
+		pageSize = pageSize == null ? 10 : pageSize;
 		if(sortMap == null){
 			return (Page<T>) dao.findAll(p, PageRequest.of(currentPage, pageSize));
 		}
