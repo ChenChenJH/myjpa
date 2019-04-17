@@ -185,8 +185,8 @@ public class QueryUtil {
 	public static void executeHql(String hql,Object... values){
 		Query query =  em.createQuery(hql);
 		if (values != null) {
-			for (int i = 0; i < values.length; i++) {
-				query.setParameter(i, values[i]);
+			for (int i = 1; i <= values.length; i++) {
+				query.setParameter(i, values[i-1]);
 			}
 		}
 		query.executeUpdate();
