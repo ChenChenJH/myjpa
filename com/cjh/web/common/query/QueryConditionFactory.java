@@ -3,6 +3,7 @@ package com.cjh.web.common.query;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -23,7 +24,6 @@ import com.cjh.web.common.query.annotation.QueryField;
 import com.cjh.web.common.query.annotation.QueryGroup;
 import com.cjh.web.common.query.annotation.QueryOrder;
 import com.cjh.web.common.query.annotation.QueryType;
-import java.util.Collection;
 
 /**
  * 
@@ -104,7 +104,7 @@ public class QueryConditionFactory {
 		} else if (type == QueryType.IS_NOT_NULL) {
 			return cb.isNotNull(getExpression(root,fieldName));
 		} else if (type == QueryType.IN){
-			return root.get(fieldName).in(((Collection)value).toArray());
+			return getExpression(root,fieldName).in(((Collection)value).toArray());
 		}
 		
 		return null;
