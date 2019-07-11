@@ -3,6 +3,7 @@ package com.cjh.web.common.query;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import com.cjh.web.common.query.annotation.QueryOrder;
 import com.cjh.web.common.query.annotation.QueryType;
 
 /**
- * 
+ * 生成查询条件
  * @author chen
  *
  * 2019年1月8日
@@ -276,13 +277,12 @@ public class QueryConditionFactory {
 	private static List<Predicate> getPredicates(CriteriaBuilder cb,Root root, Object obj){
 		List<Predicate> predicateList = new ArrayList<Predicate>();
 		try {
-			Field[] fields1 = obj.getClass().getDeclaredFields();
-			Field[] fields2 = obj.getClass().getSuperclass().getDeclaredFields();
-			Field[] fields = new Field[fields1.length + fields2.length];
-			System.arraycopy(fields1,0,fields,0,fields1.length);
-			System.arraycopy(fields2,0,fields,fields1.length,fields2.length);
-			fields1 = null;
-			fields2 = null;
+			List<Field> fields = new ArrayList<>() ;
+			Class tempClass = obj.getClass();
+			while (tempClass != null && tempClass != Object.class) {
+				fields.addAll(Arrays.asList(tempClass .getDeclaredFields()));
+			    tempClass = tempClass.getSuperclass(); 
+			}
 			Method m;
 			Object value;
 			for(Field f : fields ){
@@ -294,7 +294,6 @@ public class QueryConditionFactory {
 						queryName = f.getName();
 					}
 					m = obj.getClass().getMethod("get" + initial(f.getName()));
-					//反射执行方法获取值
 					value = m.invoke(obj);
 					if(value!= null && !"".equals(value)){
 						Predicate p = getPredicate(cb, root, queryName, value, annotation.type());

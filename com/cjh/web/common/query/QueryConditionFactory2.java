@@ -20,6 +20,13 @@ import org.springframework.data.jpa.domain.Specification;
  *
  */
 public class QueryConditionFactory2 {
+	
+	/**
+	 * 根据单个字段和值生成查询条件
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
 	public static <T> Specification<T> getSpecification(String propertyName, Object value){
 		@SuppressWarnings("serial")
 		Specification<T> s1 = new Specification<T>() {
@@ -35,6 +42,11 @@ public class QueryConditionFactory2 {
 		return s1;
 	}
 	
+	/**
+	 * 根据map集合的字段名和值生成查询条件
+	 * @param map
+	 * @return
+	 */
 	public static <T> Specification<T> getSpecification(Map<String,Object> map){
 		@SuppressWarnings("serial")
 		Specification<T> s1 = new Specification<T>() {
@@ -60,6 +72,11 @@ public class QueryConditionFactory2 {
 		return s1;
 	}
 	
+	/**
+	 * 生成排序查询条件
+	 * @param sortMap 排序map
+	 * @return
+	 */
 	public static Sort getSort(Map<String,Direction> sortMap){
 		if(sortMap == null){
 			return null;

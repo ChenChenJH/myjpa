@@ -12,14 +12,23 @@ import com.cjh.web.common.query.annotation.QueryOrder;
  * 2019年1月11日
  */
 public class BaseVO {
+	/** 当前页 **/
 	@PageCurrent
 	private Integer currentPage;
+	
+	/** 每页显示数量 **/
 	@PageSize
 	private Integer pageSize;
+	
+	/** 排序信息 **/
 	@QueryOrder
 	private String orderby;
+	
+	/** 分组信息 **/
 	@QueryGroup
 	private String groupby;
+	
+	/** 查询结果总数 **/
 	private Long total;
 	
 	public Long getTotal() {
