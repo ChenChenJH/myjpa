@@ -106,6 +106,8 @@ public class QueryConditionFactory {
 			return cb.isNotNull(getExpression(root,fieldName));
 		} else if (type == QueryType.IN){
 			return getExpression(root,fieldName).in(((Collection)value).toArray());
+		} else if (type == QueryType.NOT_IN) {
+			return cb.not(getExpression(root,fieldName).in(((Collection)value).toArray()));
 		}
 		
 		return null;

@@ -32,7 +32,8 @@ public enum QueryType {
 	/** 不包括，全模糊 **/
 	NOT_LIKE("notLike"), 
 	/** 子查询，用于查询多个同一字段的值,例如同时查询id值为1,2,3的数据，加在实现了Collection接口的集合字段上 **/
-	IN("in");
+	IN("in"),
+	NOT_IN("notIn");
 	
 	private String operation;
 	
